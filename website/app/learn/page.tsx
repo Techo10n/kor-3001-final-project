@@ -1,12 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { clsx } from "clsx";
+import { useSearchParams } from "next/navigation";
 import { TITLES, GESTURES } from "@/lib/data";
 
 export default function InfoPage() {
-  const [activeTab, setActiveTab] = useState<'titles' | 'gestures'>('titles');
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <InfoContent />
+    </Suspense>
+  );
+}
+
+function InfoContent() {
+  const searchParams = useSearchParams();
+  const [activeTab, setActiveTab] = useState<'titles' | 'gestures'>(() => {
+    const tab = searchParams.get('tab');
+    return (tab === 'gestures' || tab === 'titles') ? tab : 'titles';
+  });
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
@@ -51,8 +65,8 @@ export default function InfoPage() {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-primary/20">
-                    <th className="p-4 font-bold text-gray-700 w-1/2">상황 (Situation)</th>
-                    <th className="p-4 font-bold text-gray-700 w-1/2">호칭 (Title)</th>
+                    <th className="p-4 font-bold text-gray-700 w-1/2">상황</th>
+                    <th className="p-4 font-bold text-gray-700 w-1/2">호칭</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -81,6 +95,7 @@ export default function InfoPage() {
                   title={gesture.title}
                   description={gesture.description}
                   meaning={gesture.meaning}
+                  image={gesture.image}
                 />
               ))}
             </div>
@@ -95,16 +110,27 @@ function GestureCard({
   title,
   description,
   meaning,
+  image,
 }: {
   title: string;
   description: string;
   meaning: string;
+  image?: string;
 }) {
   return (
     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-      <div className="h-40 bg-gray-100 rounded-xl mb-4 flex items-center justify-center text-gray-400">
-        {/* Placeholder for gesture image */}
-        <span>이미지 (Image)</span>
+      <div className="h-48 bg-gray-50 rounded-xl mb-4 flex items-center justify-center overflow-hidden relative">
+        {image ? (
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-contain p-4"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        ) : (
+          <span className="text-gray-400">이미지</span>
+        )}
       </div>
       <h3 className="text-xl font-bold text-gray-800 mb-2">{title}</h3>
       <p className="text-sm text-primary font-medium mb-2">{meaning}</p>

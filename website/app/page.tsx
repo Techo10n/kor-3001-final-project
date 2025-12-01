@@ -32,14 +32,14 @@ export default function Home() {
           title="호칭"
           description="상대방을 부르는 올바른 방법을 알아보세요."
           color="bg-primary/20"
-          href="/info"
+          href="/learn"
         />
         <FeatureCard
           icon={<Hand size={48} />}
           title="몸짓 언어"
           description="손짓과 몸짓이 가진 의미를 배워보세요."
           color="bg-secondary/40"
-          href="/info"
+          href="/learn?tab=gestures"
         />
         <FeatureCard
           icon={<Users size={48} />}

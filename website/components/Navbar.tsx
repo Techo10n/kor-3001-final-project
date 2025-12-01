@@ -7,7 +7,7 @@ import { clsx } from "clsx";
 
 const navItems = [
   { name: "홈", href: "/" },
-  { name: "정보", href: "/info" },
+  { name: "배우기", href: "/learn" },
   { name: "게임", href: "/games" },
 ];
 
